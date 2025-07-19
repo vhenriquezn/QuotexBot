@@ -3,14 +3,14 @@ import time
 from datetime import datetime
 from telethon import TelegramClient, events
 from zoneinfo import ZoneInfo
-from estrategias import senal_telegram
-from utils import cargar_config, borrar_lineas, validar_entrada
+from quotextbot.estrategias import senal_telegram
+from quotextbot import utils
 import asyncio
 
 
 class TelegramSignalHandler:
     def __init__(self, telegram_path="telegram.txt", zona_local="America/Santiago", bot=None):
-        telegram = cargar_config(telegram_path)
+        telegram = utils.cargar_config(telegram_path)
         self.api_id = int(telegram.get("api_id"))
         self.api_hash = telegram.get("api_hash")
         self.canal = telegram.get("canal")
@@ -45,7 +45,7 @@ class TelegramSignalHandler:
             if self.activo_callback:
                 self.activo_callback(asset)
         except Exception as e:
-            borrar_lineas(1)
+            utils.borrar_lineas(1)
             print(f"❌ Error durante la ejecución de señal para {asset}: {e}")
 
     async def iniciar(self):
@@ -64,21 +64,21 @@ class TelegramSignalHandler:
                 par = self.normalizar_asset(asset_bruto)
                 hora_local = self.convertir_a_local(hora_raw)
                 if not hora_local:
-                    borrar_lineas(1)
+                    utils.borrar_lineas(1)
                     print("⚠️ Hora inválida, se descarta señal.")
                     return
 
                 ahora = datetime.now(ZoneInfo(self.zona_local))
                 delta = (hora_local - ahora).total_seconds()
                 if delta < -5:
-                    borrar_lineas(1)
+                    utils.borrar_lineas(1)
                     print(f"⚠️ La hora de la señal ({hora_local.strftime('%H:%M:%S')}) ya pasó. Ignorada.")
                     return
-                borrar_lineas(1)
+                utils.borrar_lineas(1)
                 print(f"📌 Señal programada: {tipo.upper()} en {par}, esperando hasta {hora_local.strftime('%H:%M:%S')}...⏳")
                 asyncio.create_task(self.esperar_y_ejecutar_senal(par, tipo, hora_local))
             else:
-                borrar_lineas(1)
+                utils.borrar_lineas(1)
                 print("⚠️ No se pudo extraer la señal del mensaje.")
         self.client_tele.add_event_handler(manejar_mensaje, events.NewMessage(chats=self.canal))
         print("🤖 Escuchando señales de Telegram...\n")

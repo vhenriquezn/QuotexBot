@@ -1,4 +1,4 @@
-from estrategias import ma_cross, topbot, momentum, senal_telegram
+from quotexbot import estrategias
 
 def borrar_lineas(n):
     for _ in range(n):
@@ -14,16 +14,16 @@ def cargar_config(ruta):
     return config
 
 def get_estrategia():
-    estrategias = {
-        "1": ("Cruzamiento de medias móviles (SMA)", ma_cross.calcular_senal_ma, 60, 5),
-        "2": ("TopBot", topbot.calcular_senal_topbot, 60, 2),
-        "3": ("Momentum", momentum.calcular_senal_momentum, 60, 2),
-        "4": ("Señales Telegram", senal_telegram.calcular_senal, 60, 2),
+    m_estrategias = {
+        "1": ("Cruzamiento de medias móviles (SMA)", estrategias.ma_cross.calcular_senal_ma, 60, 5),
+        "2": ("TopBot", estrategias.topbot.calcular_senal_topbot, 60, 2),
+        "3": ("Momentum", estrategias.momentum.calcular_senal_momentum, 60, 2),
+        "4": ("Señales Telegram", estrategias.senal_telegram.calcular_senal, 60, 2),
         "5": "Salir"
     }
 
     print("\n📊 Estrategias disponibles:\n")
-    for clave, valor in estrategias.items():
+    for clave, valor in m_estrategias.items():
         if clave == "5":
             print(f"   [{clave}] {valor}")
         else:
@@ -31,13 +31,13 @@ def get_estrategia():
 
     while True:
         eleccion = input("\nSeleccione una estrategia (número): ")
-        if eleccion in estrategias:
+        if eleccion in m_estrategias:
             if eleccion == "5":
                 print("🚪 Saliendo de la selección de estrategia.")
                 return None
-            borrar_lineas(len(estrategias) + 4)
-            print(f"✅ Estrategia seleccionada: {estrategias[eleccion][0]}\n")
-            return estrategias[eleccion][1], estrategias[eleccion][2], estrategias[eleccion][3], eleccion
+            borrar_lineas(len(m_estrategias) + 4)
+            print(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n")
+            return m_estrategias[eleccion][1], m_estrategias[eleccion][2], m_estrategias[eleccion][3], eleccion
         else:
             print("❌ Opción no válida. Intente nuevamente.")
 

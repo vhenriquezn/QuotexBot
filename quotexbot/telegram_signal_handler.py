@@ -3,8 +3,8 @@ import time
 from datetime import datetime
 from telethon import TelegramClient, events
 from zoneinfo import ZoneInfo
-from quotextbot.estrategias import senal_telegram
-from quotextbot import utils
+from quotexbot.estrategias import senal_telegram
+from quotexbot import utils
 import asyncio
 
 

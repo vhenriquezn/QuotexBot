@@ -1,5 +1,5 @@
 import asyncio
-from bot import BotModular
+from quotexbot.bot import BotModular
 
 async def main():
     bot = BotModular()

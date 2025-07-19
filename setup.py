@@ -12,7 +12,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'quotexbot=quotexbot.main:main',  # ajusta al nombre de tu función principal
+            'quotexbot=quotexbot.__main__:main',  # ajusta al nombre de tu función principal
         ],
     },
     author='Victor',

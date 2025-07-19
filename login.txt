@@ -1,0 +1,3 @@
+[LOGIN]
+email = vhenriquezn2@gmail.com
+password = 0x130x145

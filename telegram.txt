@@ -1,0 +1,3 @@
+api_id = 22320022
+api_hash = 726bd3c427f4860bf62f364f854ba68b
+canal = https://t.me/+5l9EobhcJbZhYjVh

@@ -77,13 +77,17 @@ class BotModular:
                 lineas_clr += 2    
 
         utils.borrar_lineas(lineas_clr)
-        print(f"{"Bienvenido/a:":<17}{profile.nick_name}\n")
-        print(f"{"Tipo de cuenta:":<17}{seleccion} ${await self.client.get_balance()}")
-        print(f"{"Valor entrada:":<17}{self.entrada_actual}")
+        print(f"{"Bienvenido/a":<17}:{profile.nick_name}\n")
+        print(f"{"Tipo de cuenta":<17}:{seleccion} ${await self.client.get_balance()}")
+        print(f"{'Valor entrada':<17}:{str(self.config.get('porcentaje_entrada')) + '%' + ' de la cuenta' if self.config.get('usar_porcentaje') == 'S' else self.entrada_actual}")
         if self.use_stop_win:
-            print(f"{"Stop Win:":<17}{self.stop_win}")
+            print(f"{"Stop Win":<17}:{self.stop_win}")
         if self.use_stop_loss:
-            print(f"{"Stop Loss:":<17}-{self.stop_loss}\n")
+            print(f"{"Stop Loss":<17}:-{self.stop_loss}")
+        if self.use_mg:
+            print(f"{"Niveles MG":<17}:{self.nivel_mg}")
+        if self.use_media_movil:
+            print(f"{"Periodo":<17}:{self.periodo_medias}")
 
         return True
 
@@ -137,7 +141,7 @@ class BotModular:
 
         utils.borrar_lineas(1)
         print("📈 Activos binarios abiertos disponibles:\n")
-        col_width = 30
+        col_width = 25
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
             text = f"[{i:^2}] {sym:^11}:{prof}%"
             print(text.ljust(col_width), end='')
@@ -306,7 +310,18 @@ class BotModular:
                 if await self.validar_precio_favorable(senal, precio_entrada):
                     msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado en "
                     await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
-                    
+                else:
+                    self.operaciones.append({
+                        "hora": datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'),
+                        "paridad": self.asset,
+                        "direccion": senal.upper(),
+                        "inversion": 0,
+                        "resultado": "❌ No se",
+                        "mg": 0,
+                        "lucro": 0
+                    })
+
+                    ganancia_total = mostrar_tabla(self.operaciones, 5)    
             else:
                 if opcion == "4":
                     await asyncio.sleep(1)

@@ -9,8 +9,8 @@ from pyquotex.stable_api import Quotex
 
 class BotModular:
     def __init__(self, login_path="login.txt", config_path="config.txt"):
-        self.config = utils.cargar_config(config_path)
-        login = utils.cargar_config(login_path)
+        self.config = cargar_config(config_path)
+        login = cargar_config(login_path)
 
         self.client = Quotex(email=login.get("email"), password=login.get("password"), lang="es")
         
@@ -41,13 +41,13 @@ class BotModular:
             try:
                 conectado, _ = await self.client.connect()
                 if conectado:
-                    utils.borrar_lineas(lineas_clr)
+                    borrar_lineas(lineas_clr)
                     print("✅ Conectado correctamente.\n")
                     return True
             except Exception as e:
                 print(f"Error al conectar: {e}")
             await asyncio.sleep(5)
-        utils.borrar_lineas(lineas_clr)
+        borrar_lineas(lineas_clr)
         print("❌ No se pudo conectar después de varios intentos.")
         return False
 
@@ -76,14 +76,18 @@ class BotModular:
                 print("❌ Opción inválida. Por favor, elige 1 o 2.")
                 lineas_clr += 2    
 
-        utils.borrar_lineas(lineas_clr)
-        print(f"{"Bienvenido/a:":<17}{profile.nick_name}\n")
-        print(f"{"Tipo de cuenta:":<17}{seleccion} ${await self.client.get_balance()}")
-        print(f"{"Valor entrada:":<17}{self.entrada_actual}")
+        borrar_lineas(lineas_clr)
+        print(f"{"Bienvenido/a":<17}:{profile.nick_name}\n")
+        print(f"{"Tipo de cuenta":<17}:{seleccion} ${await self.client.get_balance()}")
+        print(f"{'Valor entrada':<17}:{str(self.config.get('porcentaje_entrada')) + '%' + ' de la cuenta' if self.config.get('usar_porcentaje') == 'S' else self.entrada_actual}")
         if self.use_stop_win:
-            print(f"{"Stop Win:":<17}{self.stop_win}")
+            print(f"{"Stop Win":<17}:{self.stop_win}")
         if self.use_stop_loss:
-            print(f"{"Stop Loss:":<17}-{self.stop_loss}\n")
+            print(f"{"Stop Loss":<17}:-{self.stop_loss}")
+        if self.use_mg:
+            print(f"{"Niveles MG":<17}:{self.nivel_mg}")
+        if self.use_media_movil:
+            print(f"{"Periodo":<17}:{self.periodo_medias}")
 
         return True
 
@@ -104,7 +108,7 @@ class BotModular:
             if seleccion in tournaments:
                 self.client.api.tournament_id = int(seleccion)
                 print(f"✅ Torneo seleccionado: ID {seleccion} | Saldo: ${tournaments[seleccion]}")
-                utils.borrar_lineas(len(tournaments)+4)
+                borrar_lineas(len(tournaments)+4)
                 return tournaments[seleccion]
             else:
                 print("⚠️ ID de torneo inválido. Intenta nuevamente.")
@@ -129,15 +133,15 @@ class BotModular:
             for symbol, data in activos.items() if data.get('is_open', False)
         ]
         if not activos_abiertos:
-            utils.borrar_lineas(1)
+            borrar_lineas(1)
             print("⚠️ No hay activos binarios abiertos.")
             return None
 
         activos_ordenados = sorted(activos_abiertos, key=lambda x: x[2], reverse=True)[:limite]
 
-        utils.borrar_lineas(1)
+        borrar_lineas(1)
         print("📈 Activos binarios abiertos disponibles:\n")
-        col_width = 30
+        col_width = 25
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
             text = f"[{i:^2}] {sym:^11}:{prof}%"
             print(text.ljust(col_width), end='')
@@ -150,7 +154,7 @@ class BotModular:
             try:
                 choice = int(input("\nSeleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
-                    utils.borrar_lineas((len(activos_ordenados) // 4 + 5))
+                    borrar_lineas((len(activos_ordenados) // 4 + 5))
                     return activos_ordenados[choice - 1][0]
                 else:
                     print("Número fuera de rango.")
@@ -176,11 +180,11 @@ class BotModular:
             
             status, info = await self.client.buy(entrada, self.asset, signal, self.expiration_time)
             if not status:
-                utils.borrar_lineas(1)
+                borrar_lineas(1)
                 print("❌ No se pudo ejecutar la operación.")
                 return
 
-            utils.borrar_lineas(1)
+            borrar_lineas(1)
             resultado = await self.client.check_win(info["id"], message_check)
             profit = self.client.get_profit()
             total_profit += profit
@@ -200,7 +204,7 @@ class BotModular:
             else:
                 nivel += 1
                 entrada = round(entrada * self.factor_mg, 0)
-                utils.borrar_lineas(1)
+                borrar_lineas(1)
                 message_check = f">>🔁 Nivel MG {nivel} activado, nueva entrada: {entrada}, esperando resultado en "
                 await asyncio.sleep(0.5)
 
@@ -214,7 +218,7 @@ class BotModular:
             "lucro": total_profit
         })
 
-        ganancia_total = utils.mostrar_tabla(self.operaciones, 5)
+        ganancia_total = mostrar_tabla(self.operaciones, 5)
 
         if self.use_stop_win and ganancia_total >= self.stop_win:
             print("🎯 Stop Win alcanzado. Deteniendo operaciones.")
@@ -233,20 +237,20 @@ class BotModular:
         tiempo_espera = (60 - segundos + espera - 1) if segundos > espera else (espera - 1 - segundos)
         while tiempo_espera > 0:
             tiempo_espera -= 1
-            utils.borrar_lineas(1)
+            borrar_lineas(1)
             print(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...")
             await asyncio.sleep(1)
 
     async def validar_precio_favorable(self, signal, precio_entrada, duracion=30):
         df = await self.obtener_candles(self.asset, int(time.time()), offset=60, period=60)
         if len(df) < 15:
-            utils.borrar_lineas(1)
+            borrar_lineas(1)
             print("⚠️ No hay suficientes velas para calcular SMA.")
             return
         
         if self.use_media_movil:
-            if not utils.validar_entrada(df, signal, self.periodo_medias):
-                utils.borrar_lineas(1)
+            if not validar_entrada(df, signal, self.periodo_medias):
+                borrar_lineas(1)
                 print("❌ Condición de SMA no cumplida. No se ejecuta operación.")
                 return
 
@@ -257,24 +261,24 @@ class BotModular:
         while time.time() < tiempo_limite:
             vela = await self.client.get_candles(self.asset, int(time.time()), 60, 1)
             if not vela:
-                utils.borrar_lineas(1)
+                borrar_lineas(1)
                 print("❌ Error al obtener precio actual.")
                 await asyncio.sleep(1)
                 continue
             precio_actual = vela[0]["close"]
             if (signal == "call" and precio_actual <= precio_entrada) or (signal == "put" and precio_actual >= precio_entrada):
                 return True
-            utils.borrar_lineas(1)    
+            borrar_lineas(1)    
             print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
             await asyncio.sleep(0.5)
-        utils.borrar_lineas(1)
+        borrar_lineas(1)
         print(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.")
         await asyncio.sleep(1)
         return False
 
     async def trading_loop(self):
         await self.actualizar_entrada()
-        strategy, _, espera_segundos, opcion = utils.get_estrategia()
+        strategy, _, espera_segundos, opcion = get_estrategia()
 
         if opcion == "4":
             await self.telegram_handler.iniciar()
@@ -306,10 +310,22 @@ class BotModular:
                 if await self.validar_precio_favorable(senal, precio_entrada):
                     msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado en "
                     await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
-                    
+                else:
+                    self.operaciones.append({
+                        "hora": datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'),
+                        "paridad": self.asset,
+                        "direccion": senal.upper(),
+                        "inversion": 0,
+                        "resultado": "❌ No se",
+                        "mg": 0,
+                        "lucro": 0
+                    })
+
+                    ganancia_total = mostrar_tabla(self.operaciones, 5)
             else:
                 if opcion == "4":
                     await asyncio.sleep(1)
                 else:
                     message = f"{datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S')} - No hay señal en esta vela, "
+
 

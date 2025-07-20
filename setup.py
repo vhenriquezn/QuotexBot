@@ -10,7 +10,7 @@ setup(
         'pandas',
     ],
     include_package_data = True,
-    package_data={'quotexbot':['config.txt']},
+    package_data={'quotexbot':['config.txt', 'login.txt']},
     entry_points={
         'console_scripts': [
             'quotexbot=quotexbot.__main__:main',  # ajusta al nombre de tu función principal

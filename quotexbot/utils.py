@@ -6,7 +6,7 @@ def borrar_lineas(n):
         print("\033[F\033[K", end="")
 
 def cargar_config(ruta):
-    ruta_base = os.path.dirname(os path.abspath(__file__))
+    ruta_base = os.path.dirname(os.path.abspath(__file__))
     ruta_completa=os.path.join(ruta_base,ruta)
     config = {}
     with open(ruta_completa, "r") as f:

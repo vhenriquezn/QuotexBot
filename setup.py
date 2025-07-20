@@ -8,8 +8,9 @@ setup(
         'telethon',
         'numpy',
         'pandas',
-        # agrega tus otras dependencias aquí
     ],
+    include_package_data = True,
+    package_data={'quotexbot':['config.txt']},
     entry_points={
         'console_scripts': [
             'quotexbot=quotexbot.__main__:main',  # ajusta al nombre de tu función principal

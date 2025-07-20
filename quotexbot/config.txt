@@ -1,6 +1,6 @@
 [AJUSTES]
 valor_entrada = 1
-usar_porcentaje  S
+usar_porcentaje = S
 porcentaje_entrada = 1
 set_asset = S
 asset = EURUSD

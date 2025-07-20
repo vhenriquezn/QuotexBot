@@ -1,4 +1,5 @@
 from quotexbot import estrategias
+import os
 
 def borrar_lineas(n):
     for _ in range(n):

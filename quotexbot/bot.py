@@ -2,7 +2,7 @@ import asyncio
 import pandas as pd
 import time
 from datetime import datetime
-from quotexbot.telegram_signal_handler import TelegramSignalHandler
+from .telegram_signal_handler import TelegramSignalHandler
 from quotexbot import utils
 from pyquotex.stable_api import Quotex
 

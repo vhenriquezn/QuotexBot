@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from telethon import TelegramClient, events
 from zoneinfo import ZoneInfo
-from quotexbot.estrategias import senal_telegram
+from .estrategias import senal_telegram
 from quotexbot import utils
 import asyncio
 

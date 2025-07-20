@@ -1,4 +1,4 @@
-from quotexbot import estrategias
+from .estrategias import ma_cross, topbot,momentum, senal_telegram
 import os
 
 def borrar_lineas(n):
@@ -18,10 +18,10 @@ def cargar_config(ruta):
 
 def get_estrategia():
     m_estrategias = {
-        "1": ("Cruzamiento de medias móviles (SMA)", estrategias.ma_cross.calcular_senal_ma, 60, 5),
-        "2": ("TopBot", estrategias.topbot.calcular_senal_topbot, 60, 2),
-        "3": ("Momentum", estrategias.momentum.calcular_senal_momentum, 60, 2),
-        "4": ("Señales Telegram", estrategias.senal_telegram.calcular_senal, 60, 2),
+        "1": ("Cruzamiento de medias móviles (SMA)", ma_cross.calcular_senal_ma, 60, 5),
+        "2": ("TopBot", topbot.calcular_senal_topbot, 60, 2),
+        "3": ("Momentum", momentum.calcular_senal_momentum, 60, 2),
+        "4": ("Señales Telegram", senal_telegram.calcular_senal, 60, 2),
         "5": "Salir"
     }
 

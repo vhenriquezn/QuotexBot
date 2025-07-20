@@ -6,7 +6,7 @@ def borrar_lineas(n):
 
 def cargar_config(ruta):
     ruta_base = os.path.dirname(os path.abspath(__file__))
-       ruta_completa=os.path.join(ruta_base,ruta)
+    ruta_completa=os.path.join(ruta_base,ruta)
     config = {}
     with open(ruta_completa, "r") as f:
         for linea in f:

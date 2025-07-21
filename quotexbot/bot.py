@@ -56,7 +56,6 @@ class BotModular:
             tipo, monto = balance
             utils.imprimir_estado(f"   [{i}] {tipo:<10}: {monto:>8.2f}")
             opciones_disponibles.append(tipo)
-            lineas_clr += 1
 
         while True:
             eleccion = input("\n>> Ingresa el número de la cuenta: ").strip()

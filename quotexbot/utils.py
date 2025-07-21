@@ -19,7 +19,7 @@ def imprimir_estado(mensaje: str, borrar_anterior: bool = False, lineas_extras =
 
     print(mensaje)
     # Actualizar el contador de líneas impresas
-    lineas_mostradas = mensaje.count('\n') + 1
+    lineas_mostradas += mensaje.count('\n') + 1
 
 def cargar_config(ruta):
     ruta_base = os.path.dirname(os.path.abspath(__file__))

@@ -148,7 +148,7 @@ class BotModular:
                 if 1 <= choice <= len(activos_ordenados):
                     return activos_ordenados[choice - 1][0]
                 else:
-                    print("Número fuera de rango.")
+                    utils.imprimir_estado("Número fuera de rango.")
             except ValueError:
                 utils.imprimir_estado("Entrada inválida, ingrese un número.")
 
@@ -270,7 +270,7 @@ class BotModular:
                 if not self.asset:
                     print("No se seleccionó activo válido. Abortando.")
                     return
-            utils.imprimir_estado(f"Bot iniciado con activo {self.asset}\n", True)
+            utils.imprimir_estado(f"Bot iniciado con activo {self.asset}\n", True, 1)
 
         print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
         print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")

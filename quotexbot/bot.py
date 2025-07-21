@@ -134,12 +134,12 @@ class BotModular:
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
             text += f"[{i:^2}] {sym:^11}:{prof}%"
             if i % 4 == 0:
-                text += "/n"
+                text += "\n"
             else:
                 text.ljust(col_width)
            
         if len(activos_ordenados) % 4 != 0:
-            text += "/n"  # Salto final si no termina justo en múltiplo de 4
+            text += "\n"  # Salto final si no termina justo en múltiplo de 4
         utils.imprimir_estado(text)
 
         while True:

@@ -2,10 +2,12 @@ from .estrategias import ma_cross, topbot,momentum, senal_telegram
 import os
 import sys
 
-"""
+
 def borrar_lineas(n):
     for _ in range(n):
-        print("\033[F\033[K", end="")
+        sys.stdout.write("\033[F")  # Subir una línea
+        sys.stdout.write("\033[K")  # Borrar la línea
+    sys.stdout.flush()
 """
 lineas_mostradas = 0  # Lleva el registro de cuántas líneas se imprimieron
 def imprimir_estado(mensaje: str, borrar_anterior: bool = False, lineas_extras = 0):
@@ -21,7 +23,7 @@ def imprimir_estado(mensaje: str, borrar_anterior: bool = False, lineas_extras =
     print(mensaje)
     # Actualizar el contador de líneas impresas
     lineas_mostradas += mensaje.count('\n') + 1
-
+"""
 def cargar_config(ruta):
     ruta_base = os.path.dirname(os.path.abspath(__file__))
     ruta_completa=os.path.join(ruta_base,ruta)
@@ -45,17 +47,17 @@ def get_estrategia():
     print("\n📊 Estrategias disponibles:\n")
     for clave, valor in m_estrategias.items():
         if clave == "5":
-            imprimir_estado(f"   [{clave}] {valor}\n")
+            print(f"   [{clave}] {valor}\n")
         else:
-            imprimir_estado(f"   [{clave}] {valor[0]}")
+            print(f"   [{clave}] {valor[0]}")
 
     while True:
         eleccion = input("Seleccione una estrategia (número): ")
         if eleccion in m_estrategias:
             if eleccion == "5":
-                imprimir_estado("🚪 Saliendo de la selección de estrategia.", True)
+                print("🚪 Saliendo de la selección de estrategia.", True)
                 return None
-            imprimir_estado(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n", True, 1)
+            print(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n")
             return m_estrategias[eleccion][1], m_estrategias[eleccion][2], m_estrategias[eleccion][3], eleccion
         else:
             print("❌ Opción no válida. Intente nuevamente.")
@@ -82,5 +84,5 @@ def mostrar_tabla(operaciones):
     texto += "╚═════╩══════════╩═════════════╩═══════════╬═══════════╩════╩═══════════╬═════════╣\n"
     texto += f"{' ':>43}║{'Ganancias de la sesion':^28}║ {ganancia_total:>7.2f} ║\n"
     texto += f"{' ':>43}╚════════════════════════════╩═════════╝\n\n"
-    imprimir_estado(texto, True, 5)
+    print(texto)
     return ganancia_total

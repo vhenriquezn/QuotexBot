@@ -144,7 +144,7 @@ class BotModular:
 
         while True:
             try:
-                choice = int(input("\nSeleccione un activo (número): "))
+                choice = int(input("Seleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
                     utils.imprimir_estado("", True)
                     return activos_ordenados[choice - 1][0]
@@ -255,7 +255,7 @@ class BotModular:
                 return True
             utils.imprimir_estado(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...", True)
             await asyncio.sleep(0.5)
-        utils.imprimir_estadot(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.", True)
+        utils.imprimir_estado(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.", True)
         await asyncio.sleep(1)
         return False
 

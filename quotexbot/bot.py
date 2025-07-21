@@ -35,26 +35,27 @@ class BotModular:
 
     async def conectar(self, reintentos=5):
         for intento in range(reintentos):
-            utils.imprimir_estado(f">> Intentando conectar... intento {intento + 1}")
+            print(f">> Intentando conectar... intento {intento + 1}")
             try:
                 conectado, _ = await self.client.connect()
                 if conectado:
-                    utils.imprimir_estado("✅ Conectado correctamente.\n", True)
+                    utils.borrar_lineas(1)
+                    print("✅ Conectado correctamente.\n")
                     return True
             except Exception as e:
-                utils.imprimir_estado(f"Error al conectar: {e}")
+                print(f"Error al conectar: {e}")
             await asyncio.sleep(5)
-        utils.imprimir_estado("❌ No se pudo conectar después de varios intentos.", True)
+        print("❌ No se pudo conectar después de varios intentos.", True)
         return False
 
     async def set_account(self):
         profile = await self.client.get_profile()
         balances = [("REAL", profile.live_balance) , ("PRACTICE", profile.demo_balance), ("TOURNAMENT", 0)]
-        utils.imprimir_estado("📊 BALANCES DISPONIBLES:\n")
+        print("📊 BALANCES DISPONIBLES:\n")
         opciones_disponibles = []
         for i, balance in enumerate(balances, start=1):
             tipo, monto = balance
-            utils.imprimir_estado(f"   [{i}] {tipo:<10}: {monto:>8.2f}")
+            print(f"   [{i}] {tipo:<10}: {monto:>8.2f}")
             opciones_disponibles.append(tipo)
 
         while True:
@@ -66,9 +67,10 @@ class BotModular:
                 self.client.change_account(seleccion.upper())
                 break
             else:
-                utils.imprimir_estado("❌ Opción inválida. Por favor, elige 1 o 2.")    
+                print("❌ Opción inválida. Por favor, elige 1 o 2.")    
 
-        utils.imprimir_estado(f"{"Bienvenido/a":<17}:{profile.nick_name}\n", True)
+        utils.borrar_lineas(4)
+        print(f"{"Bienvenido/a":<17}:{profile.nick_name}\n")
         print(f"{"Tipo de cuenta":<17}:{seleccion} ${await self.client.get_balance()}")
         print(f"{'Valor entrada':<17}:{str(self.config.get('porcentaje_entrada')) + '%' + ' de la cuenta' if self.config.get('usar_porcentaje') == 'S' else self.entrada_actual}")
         if self.use_stop_win:

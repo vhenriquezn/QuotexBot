@@ -132,7 +132,7 @@ class BotModular:
         col_width = 25
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
             text = f"[{i:^2}] {sym:^11}:{prof}%"
-            utils.imprimir_estado(text.ljust(col_width), end='')
+            utils.imprimir_estado(text.ljust(col_width))
             if i % 4 == 0:
                 utils.imprimir_estado("")  # Salto de línea cada 4 columnas
         if len(activos_ordenados) % 4 != 0:

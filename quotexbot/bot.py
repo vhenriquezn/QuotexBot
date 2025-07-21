@@ -88,10 +88,10 @@ class BotModular:
         tournaments = self.client.api.account_balance.get("tournamentsBalances", {})
         
         if not tournaments:
-            imprimir_estado("❌ No estás inscrito en ningún torneo.")
+            print("❌ No estás inscrito en ningún torneo.")
             return None
 
-        utils.imprimir_estado("\n🎯 Torneos disponibles:")
+        print("\n🎯 Torneos disponibles:")
         for tournament_id, balance in tournaments.items():
             utils.imprimir_estado(f"ID Torneo: {tournament_id} | Saldo: ${balance}")
 
@@ -100,7 +100,7 @@ class BotModular:
             
             if seleccion in tournaments:
                 self.client.api.tournament_id = int(seleccion)
-                utils.imprimir_estado(f"✅ Torneo seleccionado: ID {seleccion} | Saldo: ${tournaments[seleccion]}", True)
+                print(f"✅ Torneo seleccionado: ID {seleccion} | Saldo: ${tournaments[seleccion]}")
                 return tournaments[seleccion]
             else:
                 print("⚠️ ID de torneo inválido. Intenta nuevamente.")
@@ -118,19 +118,19 @@ class BotModular:
         self.asset = nuevo_activo
 
     async def seleccionar_activo_abierto(self, limite=20):
-        utils.imprimir_estado("🕵️‍♂️ Iniciando búsqueda de activos abiertos en la plataforma...")
+        print("🕵️‍♂️ Iniciando búsqueda de activos abiertos en la plataforma...")
         activos = await self.client.check_asset_open_v2()
         activos_abiertos = [
             (symbol, data['name'], data['profit'])
             for symbol, data in activos.items() if data.get('is_open', False)
         ]
         if not activos_abiertos:
-            utils.imprimir_estado("⚠️ No hay activos binarios abiertos.", True)
+            print("⚠️ No hay activos binarios abiertos.")
             return None
 
         activos_ordenados = sorted(activos_abiertos, key=lambda x: x[2], reverse=True)[:limite]
 
-        utils.imprimir_estado("📈 Activos binarios abiertos disponibles:\n", True)
+        print("📈 Activos binarios abiertos disponibles:\n")
         col_width = 25
         text=""
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
@@ -142,7 +142,7 @@ class BotModular:
            
         if len(activos_ordenados) % 4 != 0:
             text += "\n"  # Salto final si no termina justo en múltiplo de 4
-        utils.imprimir_estado(text)
+        print(text)
 
         while True:
             try:
@@ -211,11 +211,11 @@ class BotModular:
         ganancia_total = utils.mostrar_tabla(self.operaciones, 5)
 
         if self.use_stop_win and ganancia_total >= self.stop_win:
-            utils.imprimir_estado("🎯 Stop Win alcanzado. Deteniendo operaciones.")
+            print("🎯 Stop Win alcanzado. Deteniendo operaciones.")
             return
 
         if self.use_stop_loss and ganancia_total <= -self.stop_loss:
-            utils.imprimir_estado("🛑 Stop Loss alcanzado. Deteniendo operaciones.")
+            print("🛑 Stop Loss alcanzado. Deteniendo operaciones.")
             return
 
         self.nivel_actual = 0
@@ -227,18 +227,19 @@ class BotModular:
         tiempo_espera = (60 - segundos + espera - 1) if segundos > espera else (espera - 1 - segundos)
         while tiempo_espera > 0:
             tiempo_espera -= 1
-            utils.imprimir_estado(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...", True)
+            utils.borrar_linea(1)
+            print(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...")
             await asyncio.sleep(1)
 
     async def validar_precio_favorable(self, signal, precio_entrada, duracion=30):
         df = await self.obtener_candles(self.asset, int(time.time()), offset=60, period=60)
         if len(df) < 15:
-            utils.imprimir_estado("⚠️ No hay suficientes velas para calcular SMA.", True)
+           print("⚠️ No hay suficientes velas para calcular SMA.")
             return
         
         if self.use_media_movil:
             if not utils.validar_entrada(df, signal, self.periodo_medias):
-                utils.imprimir_estado("❌ Condición de SMA no cumplida. No se ejecuta operación.", True)
+                print("❌ Condición de SMA no cumplida. No se ejecuta operación.", True)
                 return
 
         if not precio_entrada:
@@ -248,7 +249,7 @@ class BotModular:
         while time.time() < tiempo_limite:
             vela = await self.client.get_candles(self.asset, int(time.time()), 60, 1)
             if not vela:
-                utils.imprimir_estado("❌ Error al obtener precio actual.", True)
+                print("❌ Error al obtener precio actual.")
                 await asyncio.sleep(1)
                 continue
             precio_actual = vela[0]["close"]

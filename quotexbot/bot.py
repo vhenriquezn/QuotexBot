@@ -116,7 +116,7 @@ class BotModular:
         self.asset = nuevo_activo
 
     async def seleccionar_activo_abierto(self, limite=20):
-        print("🕵️‍♂️ Iniciando búsqueda de activos abiertos en la plataforma...")
+        utils.imprimir_estado("🕵️‍♂️ Iniciando búsqueda de activos abiertos en la plataforma...")
         activos = await self.client.check_asset_open_v2()
         activos_abiertos = [
             (symbol, data['name'], data['profit'])
@@ -128,7 +128,7 @@ class BotModular:
 
         activos_ordenados = sorted(activos_abiertos, key=lambda x: x[2], reverse=True)[:limite]
 
-        utils.imprimir_estado("📈 Activos binarios abiertos disponibles:\n")
+        utils.imprimir_estado("📈 Activos binarios abiertos disponibles:\n", True)
         col_width = 25
         text=""
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):

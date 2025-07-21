@@ -34,7 +34,6 @@ class BotModular:
         self.nivel_actual = 0
 
     async def conectar(self, reintentos=5):
-        lineas_clr = 0
         for intento in range(reintentos):
             utils.imprimir_estado(f">> Intentando conectar... intento {intento + 1}")
             try:
@@ -49,10 +48,9 @@ class BotModular:
         return False
 
     async def set_account(self):
-        lineas_clr = 1
         profile = await self.client.get_profile()
         balances = [("REAL", profile.live_balance) , ("PRACTICE", profile.demo_balance), ("TOURNAMENT", 0)]
-        print("📊 BALANCES DISPONIBLES:\n")
+        utils.imprimir_estado("📊 BALANCES DISPONIBLES:\n", True)
         opciones_disponibles = []
         for i, balance in enumerate(balances, start=1):
             tipo, monto = balance

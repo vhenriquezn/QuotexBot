@@ -137,9 +137,10 @@ class BotModular:
                 text += "/n"
             else:
                 text.ljust(col_width)
-            utils.imprimir_estado(text.ljust(col_width))
+           
         if len(activos_ordenados) % 4 != 0:
-            utils.imprimir_estado("")  # Salto final si no termina justo en múltiplo de 4
+            text += "/n"  # Salto final si no termina justo en múltiplo de 4
+        utils.imprimir_estado(text)
 
         while True:
             try:

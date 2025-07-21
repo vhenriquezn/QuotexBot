@@ -173,7 +173,7 @@ class BotModular:
             
             status, info = await self.client.buy(entrada, self.asset, signal, self.expiration_time)
             if not status:
-                utils.imprimir_estado("❌ No se pudo ejecutar la operación.", True)
+                print("❌ No se pudo ejecutar la operación.")
                 return
                 
             resultado = await self.client.check_win(info["id"], message_check)
@@ -235,11 +235,11 @@ class BotModular:
         df = await self.obtener_candles(self.asset, int(time.time()), offset=60, period=60)
         if len(df) < 15:
            print("⚠️ No hay suficientes velas para calcular SMA.")
-            return
+           return
         
         if self.use_media_movil:
             if not utils.validar_entrada(df, signal, self.periodo_medias):
-                print("❌ Condición de SMA no cumplida. No se ejecuta operación.", True)
+                print("❌ Condición de SMA no cumplida. No se ejecuta operación.")
                 return
 
         if not precio_entrada:

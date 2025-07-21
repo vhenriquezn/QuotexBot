@@ -227,7 +227,7 @@ class BotModular:
         tiempo_espera = (60 - segundos + espera - 1) if segundos > espera else (espera - 1 - segundos)
         while tiempo_espera > 0:
             tiempo_espera -= 1
-            utils.borrar_linea(1)
+            utils.borrar_lineas(1)
             print(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...")
             await asyncio.sleep(1)
 

@@ -50,7 +50,7 @@ class BotModular:
     async def set_account(self):
         profile = await self.client.get_profile()
         balances = [("REAL", profile.live_balance) , ("PRACTICE", profile.demo_balance), ("TOURNAMENT", 0)]
-        utils.imprimir_estado("📊 BALANCES DISPONIBLES:\n", True)
+        print("📊 BALANCES DISPONIBLES:\n")
         opciones_disponibles = []
         for i, balance in enumerate(balances, start=1):
             tipo, monto = balance

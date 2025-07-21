@@ -16,6 +16,7 @@ def imprimir_estado(mensaje: str, borrar_anterior: bool = False, lineas_extras =
             sys.stdout.write("\033[F")  # Subir una línea
             sys.stdout.write("\033[K")  # Borrar la línea
         sys.stdout.flush()
+        lineas_mostradas = 0
 
     print(mensaje)
     # Actualizar el contador de líneas impresas

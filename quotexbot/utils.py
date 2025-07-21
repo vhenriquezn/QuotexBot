@@ -42,7 +42,7 @@ def get_estrategia():
         "5": "Salir"
     }
 
-    print("📊 Estrategias disponibles:\n")
+    print("\n📊 Estrategias disponibles:\n")
     for clave, valor in m_estrategias.items():
         if clave == "5":
             imprimir_estado(f"   [{clave}] {valor}\n")
@@ -55,7 +55,7 @@ def get_estrategia():
             if eleccion == "5":
                 imprimir_estado("🚪 Saliendo de la selección de estrategia.", True)
                 return None
-            imprimir_estado(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n", True)
+            imprimir_estado(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n", True, 1)
             return m_estrategias[eleccion][1], m_estrategias[eleccion][2], m_estrategias[eleccion][3], eleccion
         else:
             print("❌ Opción no válida. Intente nuevamente.")

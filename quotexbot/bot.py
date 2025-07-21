@@ -146,7 +146,6 @@ class BotModular:
             try:
                 choice = int(input("Seleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
-                    utils.imprimir_estado("", True)
                     return activos_ordenados[choice - 1][0]
                 else:
                     print("Número fuera de rango.")
@@ -271,7 +270,7 @@ class BotModular:
                 if not self.asset:
                     print("No se seleccionó activo válido. Abortando.")
                     return
-            print(f"\nBot iniciado con activo {self.asset}\n")
+            imprimir_estado(f"Bot iniciado con activo {self.asset}\n", True)
 
         print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
         print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")

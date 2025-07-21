@@ -150,9 +150,9 @@ class BotModular:
                 if 1 <= choice <= len(activos_ordenados):
                     return activos_ordenados[choice - 1][0]
                 else:
-                    utils.imprimir_estado("Número fuera de rango.")
+                    print("Número fuera de rango.")
             except ValueError:
-                utils.imprimir_estado("Entrada inválida, ingrese un número.")
+                print("Entrada inválida, ingrese un número.")
 
     async def obtener_candles(self, asset, end_time, offset, period):
         candles = await self.client.get_candles(asset, end_time, offset, period)

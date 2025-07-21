@@ -304,7 +304,7 @@ class BotModular:
                         "lucro": 0
                     })
 
-                    ganancia_total = utils.mostrar_tabla(self.operaciones, 5)    
+                    ganancia_total = utils.mostrar_tabla(self.operaciones)    
             else:
                 if opcion == "4":
                     await asyncio.sleep(1)

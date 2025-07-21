@@ -255,9 +255,9 @@ class BotModular:
             precio_actual = vela[0]["close"]
             if (signal == "call" and precio_actual <= precio_entrada) or (signal == "put" and precio_actual >= precio_entrada):
                 return True
-            utils.imprimir_estado(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...", True)
+            print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...", True)
             await asyncio.sleep(0.5)
-        utils.imprimir_estado(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.", True)
+        print(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.")
         await asyncio.sleep(1)
         return False
 
@@ -273,7 +273,7 @@ class BotModular:
                 if not self.asset:
                     print("No se seleccionó activo válido. Abortando.")
                     return
-            utils.imprimir_estado(f"Bot iniciado con activo {self.asset}\n", True, 1)
+            print(f"Bot iniciado con activo {self.asset}\n")
 
         print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
         print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")

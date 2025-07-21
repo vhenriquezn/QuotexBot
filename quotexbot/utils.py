@@ -42,7 +42,7 @@ def get_estrategia():
         "5": "Salir"
     }
 
-    imprimir_estado("\n📊 Estrategias disponibles:\n")
+    print("\n📊 Estrategias disponibles:\n")
     for clave, valor in m_estrategias.items():
         if clave == "5":
             imprimir_estado(f"   [{clave}] {valor}")

@@ -64,7 +64,6 @@ class BotModular:
                     self.seleccionar_torneo()
                 seleccion = opciones_disponibles[int(eleccion) - 1]
                 self.client.change_account(seleccion.upper())
-                lineas_clr += 5
                 break
             else:
                 utils.imprimir_estado("❌ Opción inválida. Por favor, elige 1 o 2.")    

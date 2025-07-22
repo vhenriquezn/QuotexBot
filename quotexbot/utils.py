@@ -85,5 +85,6 @@ def mostrar_tabla(operaciones):
     texto += "╚═════╩══════════╩═════════════╩═══════════╬═══════════╩════╩═══════════╬═════════╣\n"
     texto += f"{' ':>43}║{'Ganancias de la sesion':^28}║ {ganancia_total:>7.2f} ║\n"
     texto += f"{' ':>43}╚════════════════════════════╩═════════╝\n\n"
+    borrar_lineas(5)
     print(texto)
     return ganancia_total

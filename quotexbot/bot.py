@@ -155,7 +155,7 @@ class BotModular:
                     print("Número fuera de rango.")
             except ValueError:
                 print("Entrada inválida, ingrese un número.")
-"""
+    """
     async def get_result(self, operation_id: str):
         """Check if the trade is a win based on its ID.
 
@@ -173,7 +173,7 @@ class BotModular:
                 return status, item
 
         return None, "OperationID Not Found."
-"""
+    """
     async def obtener_candles(self, asset, end_time, offset, period):
         candles = await self.client.get_candles(asset, end_time, offset, period)
         df = pd.DataFrame(candles)

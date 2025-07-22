@@ -81,7 +81,10 @@ def mostrar_tabla(operaciones):
     ganancia_total = sum(op['lucro'] for op in operaciones)
     for i, op in enumerate(operaciones, start=1):
         if i == len(operaciones):
-            texto += f"║ {i:^3} ║ {op['hora']:^8} ║ {op['paridad']:^11} ║ {op['direccion']:^9} ║{op['resultado']:^10}║{op['mg']:^4}║ {op['inversion']:^9} ║ {op['lucro']:>7.2f} ║\n"
+            if not op['inversion']:
+                 texto += f"║ {i:^3} ║ {op['hora']:^8} ║ {op['paridad']:^11} ║ {op['direccion']:^9} ║{op['resultado']:^50}║\n"
+            else:
+                 texto += f"║ {i:^3} ║ {op['hora']:^8} ║ {op['paridad']:^11} ║ {op['direccion']:^9} ║{op['resultado']:^10}║{op['mg']:^4}║ {op['inversion']:^9} ║ {op['lucro']:>7.2f} ║\n"
     texto += "╚═════╩══════════╩═════════════╩═══════════╬═══════════╩════╩═══════════╬═════════╣\n"
     texto += f"{' ':>43}║{'Ganancias de la sesion':^28}║ {ganancia_total:>7.2f} ║\n"
     texto += f"{' ':>43}╚════════════════════════════╩═════════╝\n\n"

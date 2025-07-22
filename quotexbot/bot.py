@@ -251,14 +251,17 @@ class BotModular:
         while time.time() < tiempo_limite:
             vela = await self.client.get_candles(self.asset, int(time.time()), 60, 1)
             if not vela:
+                utils.borrar_lineas(1)
                 print("❌ Error al obtener precio actual.")
                 await asyncio.sleep(1)
                 continue
             precio_actual = vela[0]["close"]
             if (signal == "call" and precio_actual <= precio_entrada) or (signal == "put" and precio_actual >= precio_entrada):
                 return True
-            print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...", True)
+            utils.borrar_lineas(1)
+            print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
             await asyncio.sleep(0.5)
+        utils.borrar_lineas(1)
         print(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.")
         await asyncio.sleep(1)
         return False

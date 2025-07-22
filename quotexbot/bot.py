@@ -241,7 +241,7 @@ class BotModular:
         
         if self.use_media_movil:
             if not utils.validar_entrada(df, signal, self.periodo_medias):
-                return False, "❌ Condición de SMA no cumplida. No se ejecuta operación."
+                return False, "❌ Condición de SMA no cumplida"
 
         if not precio_entrada:
             return True, None
@@ -260,7 +260,7 @@ class BotModular:
             utils.borrar_lineas(1)
             print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
             await asyncio.sleep(0.5)
-        return False, f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s."
+        return False, f"⚠️ No alcanzó precio favorable en {duracion}s."
 
     async def trading_loop(self):
         await self.actualizar_entrada()

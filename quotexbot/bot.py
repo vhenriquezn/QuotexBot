@@ -45,7 +45,7 @@ class BotModular:
             except Exception as e:
                 print(f"Error al conectar: {e}")
             await asyncio.sleep(5)
-        print("❌ No se pudo conectar después de varios intentos.", True)
+        print("❌ No se pudo conectar después de varios intentos.)
         return False
 
     async def set_account(self):
@@ -69,7 +69,7 @@ class BotModular:
             else:
                 print("❌ Opción inválida. Por favor, elige 1 o 2.")    
 
-        utils.borrar_lineas(4)
+        utils.borrar_lineas(len(opciones_disponibles)+4)
         print(f"{"Bienvenido/a":<17}:{profile.nick_name}\n")
         print(f"{"Tipo de cuenta":<17}:{seleccion} ${await self.client.get_balance()}")
         print(f"{'Valor entrada':<17}:{str(self.config.get('porcentaje_entrada')) + '%' + ' de la cuenta' if self.config.get('usar_porcentaje') == 'S' else self.entrada_actual}")

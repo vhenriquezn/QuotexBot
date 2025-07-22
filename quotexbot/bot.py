@@ -93,7 +93,7 @@ class BotModular:
 
         print("\n🎯 Torneos disponibles:")
         for tournament_id, balance in tournaments.items():
-            utils.imprimir_estado(f"ID Torneo: {tournament_id} | Saldo: ${balance}")
+            print(f"ID Torneo: {tournament_id} | Saldo: ${balance}")
 
         while True:
             seleccion = input("👉 Ingresa el ID del torneo que quieres usar: ").strip()
@@ -130,7 +130,7 @@ class BotModular:
 
         activos_ordenados = sorted(activos_abiertos, key=lambda x: x[2], reverse=True)[:limite]
 
-        borrar_lineas(1)
+        utils.borrar_lineas(1)
         print("📈 Activos binarios abiertos disponibles:\n")
         col_width = 28
         text=""
@@ -149,7 +149,7 @@ class BotModular:
             try:
                 choice = int(input("Seleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
-                    borrar_lineas(len(activos_ordenados)/4+4)
+                    utils.borrar_lineas(len(activos_ordenados)/4+4)
                     return activos_ordenados[choice - 1][0]
                 else:
                     print("Número fuera de rango.")

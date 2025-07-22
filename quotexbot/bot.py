@@ -233,19 +233,18 @@ class BotModular:
             print(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...")
             await asyncio.sleep(1)
 
-    async def validar_precio_favorable(self, signal, precio_entrada, duracion=30):
+    async def validar_senal(self, signal, precio_entrada, duracion=30):
         df = await self.obtener_candles(self.asset, int(time.time()), offset=60, period=60)
         if len(df) < 15:
-           print("⚠️ No hay suficientes velas para calcular SMA.")
-           return
+           return False, "⚠️ No hay suficientes velas para calcular SMA."
+           
         
         if self.use_media_movil:
             if not utils.validar_entrada(df, signal, self.periodo_medias):
-                print("❌ Condición de SMA no cumplida. No se ejecuta operación.")
-                return
+                return False, "❌ Condición de SMA no cumplida. No se ejecuta operación."
 
         if not precio_entrada:
-            return True
+            return True, None
         tiempo_limite = time.time() + duracion
         
         while time.time() < tiempo_limite:
@@ -257,14 +256,11 @@ class BotModular:
                 continue
             precio_actual = vela[0]["close"]
             if (signal == "call" and precio_actual <= precio_entrada) or (signal == "put" and precio_actual >= precio_entrada):
-                return True
+                return True, None
             utils.borrar_lineas(1)
             print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
             await asyncio.sleep(0.5)
-        utils.borrar_lineas(1)
-        print(f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s.")
-        await asyncio.sleep(1)
-        return False
+        return False, f"⚠️ Cancelada operación {signal.upper()} por no alcanzar precio favorable en {duracion}s."
 
     async def trading_loop(self):
         await self.actualizar_entrada()
@@ -297,7 +293,8 @@ class BotModular:
             senal = strategy(df)
             if senal:
                 precio_entrada = 0 if df is None else df.iloc[-1]["open"]
-                if await self.validar_precio_favorable(senal, precio_entrada):
+                isValida, info = await self.validar_senal(senal, precio_entrada)
+                if isValida:
                     msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado en "
                     await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
                 else:
@@ -306,9 +303,9 @@ class BotModular:
                         "paridad": self.asset,
                         "direccion": senal.upper(),
                         "inversion": 0,
-                        "resultado": "❌ No se",
-                        "mg": 0,
-                        "lucro": 0
+                        "resultado": info,
+                        "mg": None,
+                        "lucro": None
                     })
 
                     ganancia_total = utils.mostrar_tabla(self.operaciones)    

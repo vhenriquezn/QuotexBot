@@ -236,7 +236,7 @@ class BotModular:
     async def validar_senal(self, signal, precio_entrada, duracion=30):
         df = await self.obtener_candles(self.asset, int(time.time()), offset=60, period=60)
         if len(df) < 15:
-           return False, "⚠️ No hay suficientes velas para calcular SMA."
+           return False, "⚠️ No hay suficientes velas para calcular SMA"
            
         
         if self.use_media_movil:
@@ -260,7 +260,7 @@ class BotModular:
             utils.borrar_lineas(1)
             print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
             await asyncio.sleep(0.5)
-        return False, f"⚠️ No alcanzó precio favorable en {duracion}s."
+        return False, f"⚠️ No alcanzó precio favorable en {duracion}s"
 
     async def trading_loop(self):
         await self.actualizar_entrada()

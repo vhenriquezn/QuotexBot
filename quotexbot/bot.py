@@ -45,7 +45,7 @@ class BotModular:
             except Exception as e:
                 print(f"Error al conectar: {e}")
             await asyncio.sleep(5)
-        print("❌ No se pudo conectar después de varios intentos.)
+        print("❌ No se pudo conectar después de varios intentos.")
         return False
 
     async def set_account(self):

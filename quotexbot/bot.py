@@ -155,7 +155,25 @@ class BotModular:
                     print("Número fuera de rango.")
             except ValueError:
                 print("Entrada inválida, ingrese un número.")
+"""
+    async def get_result(self, operation_id: str):
+        """Check if the trade is a win based on its ID.
 
+        Args:
+            operation_id (str): The ID of the trade to check.
+        Returns:
+            str: win if the trade is a win, loss otherwise.
+            float: The profit from operations; returns 0 if no profit is recorded.
+        """
+        data_history = await self.get_history()
+        for item in data_history:
+            if item.get("ticket") == operation_id:
+                profit = float(item.get("profitAmount", 0))
+                status = "win" if profit > 0 else "loss"
+                return status, item
+
+        return None, "OperationID Not Found."
+"""
     async def obtener_candles(self, asset, end_time, offset, period):
         candles = await self.client.get_candles(asset, end_time, offset, period)
         df = pd.DataFrame(candles)
@@ -316,3 +334,5 @@ class BotModular:
                     await asyncio.sleep(1)
                 else:
                     message = f"{datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S')} - No hay señal en esta vela, "
+        print("Cerrando sesion...")
+        self.client.close()

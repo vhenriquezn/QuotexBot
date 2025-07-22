@@ -55,7 +55,7 @@ def get_estrategia():
         eleccion = input("Seleccione una estrategia (número): ")
         if eleccion in m_estrategias:
             if eleccion == "5":
-                print("🚪 Saliendo de la selección de estrategia.", True)
+                print("🚪 Saliendo de la selección de estrategia.")
                 return None
             borrar_lineas(len(m_estrategias)+4)
             print(f"✅ Estrategia seleccionada: {m_estrategias[eleccion][0]}\n")

@@ -172,7 +172,7 @@ class BotModular:
         resultado_final = "❌ LOSS"
 
         while True:
-            
+            utils.borrar_lineas(1)
             status, info = await self.client.buy(entrada, self.asset, signal, self.expiration_time)
             if not status:
                 print("❌ No se pudo ejecutar la operación.")

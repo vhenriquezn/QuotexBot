@@ -198,7 +198,7 @@ class BotModular:
                 nivel += 1
                 entrada = round(entrada * self.factor_mg, 0)
                 message_check = f">>🔁 Nivel MG {nivel} activado, nueva entrada: {entrada}, esperando resultado en "
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
 
         self.operaciones.append({
             "hora": hora,

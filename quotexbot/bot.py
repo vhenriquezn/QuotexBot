@@ -130,8 +130,9 @@ class BotModular:
 
         activos_ordenados = sorted(activos_abiertos, key=lambda x: x[2], reverse=True)[:limite]
 
+        borrar_lineas(1)
         print("📈 Activos binarios abiertos disponibles:\n")
-        col_width = 25
+        col_width = 28
         text=""
         for i, (sym, name, prof) in enumerate(activos_ordenados, 1):
             text += f"[{i:^2}] {sym:^11}:{prof}%"
@@ -148,6 +149,7 @@ class BotModular:
             try:
                 choice = int(input("Seleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
+                    borrar_lineas(len(activos_ordenados)/4+4)
                     return activos_ordenados[choice - 1][0]
                 else:
                     print("Número fuera de rango.")

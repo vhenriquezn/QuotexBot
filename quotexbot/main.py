@@ -8,4 +8,10 @@ async def main():
     await bot.trading_loop()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.new_event_loop()
+    try:
+        loop.run_until_complete(main())
+    except KeyboardInterrupt:
+        print("\nClosing the program.")
+    finally:
+        loop.close()

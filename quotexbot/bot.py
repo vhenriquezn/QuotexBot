@@ -149,7 +149,7 @@ class BotModular:
             try:
                 choice = int(input("Seleccione un activo (número): "))
                 if 1 <= choice <= len(activos_ordenados):
-                    utils.borrar_lineas(len(activos_ordenados)/4+4)
+                    utils.borrar_lineas(len(activos_ordenados)//4+4)
                     return activos_ordenados[choice - 1][0]
                 else:
                     print("Número fuera de rango.")

@@ -157,14 +157,6 @@ class BotModular:
                 print("Entrada inválida, ingrese un número.")
     """
     async def get_result(self, operation_id: str):
-        """Check if the trade is a win based on its ID.
-
-        Args:
-            operation_id (str): The ID of the trade to check.
-        Returns:
-            str: win if the trade is a win, loss otherwise.
-            float: The profit from operations; returns 0 if no profit is recorded.
-        """
         data_history = await self.get_history()
         for item in data_history:
             if item.get("ticket") == operation_id:

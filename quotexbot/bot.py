@@ -210,7 +210,7 @@ class BotModular:
             "lucro": total_profit
         })
 
-        ganancia_total = utils.mostrar_tabla(self.operaciones, 5)
+        ganancia_total = utils.mostrar_tabla(self.operaciones)
 
         if self.use_stop_win and ganancia_total >= self.stop_win:
             print("🎯 Stop Win alcanzado. Deteniendo operaciones.")

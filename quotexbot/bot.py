@@ -274,7 +274,7 @@ class BotModular:
                 if not self.asset:
                     print("No se seleccionó activo válido. Abortando.")
                     return
-            print(f"Bot iniciado con activo {self.asset}\n")
+            print(f"Bot iniciado con activo {self.asset}. esperando señales...\n")
 
         print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
         print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")

@@ -305,7 +305,7 @@ class BotModular:
                         "inversion": 0,
                         "resultado": info,
                         "mg": None,
-                        "lucro": None
+                        "lucro": 0
                     })
 
                     ganancia_total = utils.mostrar_tabla(self.operaciones)    

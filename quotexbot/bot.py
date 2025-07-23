@@ -188,7 +188,9 @@ class BotModular:
                 print("❌ No se pudo ejecutar la operación.")
                 return
                 
-            resultado = await self.client.check_win(info["id"], message_check)
+            #resultado = await self.client.check_win(info["id"], message_check)
+            status, resultado = await self.client.get_result(info["id"])
+            print(resultado)
             profit = self.client.get_profit()
             total_profit += profit
 

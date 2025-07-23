@@ -320,5 +320,5 @@ class BotModular:
         except (KeyboardInterrupt, asyncio.CancelledError):
             print("\n🛑 Programa detenido por el usuario.")
         finally:
-            print("cerrando")
-            self.client.close()
+            print(">>Cerrando bot...")
+            await self.client.close()

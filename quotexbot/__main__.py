@@ -14,7 +14,7 @@ if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     try:
         loop.run_until_complete(main())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, asyncio.CancelledError):
         print("\nClosing the program.")
     finally:
         loop.close()

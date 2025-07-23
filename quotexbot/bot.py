@@ -179,8 +179,7 @@ class BotModular:
                 print("❌ No se pudo ejecutar la operación.")
                 return
                 
-            resultado = await self.client.check_winv2(buy_info["id"])
-            profit = self.client.get_profit()
+            resultado, profit = await self.client.check_winv2(buy_info["id"])
             total_profit += profit
 
             if profit > 0:
@@ -198,7 +197,7 @@ class BotModular:
             else:
                 nivel += 1
                 entrada = round(entrada * self.factor_mg, 0)
-                message_check = f">>🔁 Nivel MG {nivel} activado, nueva entrada: {entrada}, esperando resultado en "
+                message_check = f">>🔁 Nivel MG {nivel} activado, nueva entrada: {entrada}, esperando resultado...⏳ "
                 await asyncio.sleep(1)
 
         self.operaciones.append({
@@ -231,7 +230,7 @@ class BotModular:
         while tiempo_espera > 0:
             tiempo_espera -= 1
             utils.borrar_lineas(1)
-            print(f">>{message}⏳ esperando próxima vela en {tiempo_espera} segundos...")
+            print(f">>{message}esperando próxima vela en {tiempo_espera} segundos...⏳")
             await asyncio.sleep(1)
 
     async def validar_senal(self, signal, precio_entrada, duracion=30):
@@ -259,7 +258,7 @@ class BotModular:
             if (signal == "call" and precio_actual <= precio_entrada) or (signal == "put" and precio_actual >= precio_entrada):
                 return True, None
             utils.borrar_lineas(1)
-            print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...")
+            print(f"Esperando mejor precio ({signal.upper()}): actual={precio_actual:.5f}, apertura={precio_entrada:.5f}...⏳")
             await asyncio.sleep(0.5)
         return False, f"⚠️ No alcanzó precio favorable en {duracion}s"
 
@@ -298,7 +297,7 @@ class BotModular:
                 precio_entrada = 0 if df is None else df.iloc[-1]["open"]
                 isValida, info = await self.validar_senal(senal, precio_entrada)
                 if isValida:
-                    msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado en "
+                    msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado...⏳ "
                     await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
                 else:
                     self.operaciones.append({

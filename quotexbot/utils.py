@@ -8,22 +8,7 @@ def borrar_lineas(n):
         sys.stdout.write("\033[F")  # Subir una línea
         sys.stdout.write("\033[K")  # Borrar la línea
     sys.stdout.flush()
-"""
-lineas_mostradas = 0  # Lleva el registro de cuántas líneas se imprimieron
-def imprimir_estado(mensaje: str, borrar_anterior: bool = False, lineas_extras = 0):
-    global lineas_mostradas
 
-    if borrar_anterior and lineas_mostradas > 0:
-        for _ in range(lineas_mostradas + lineas_extras):
-            sys.stdout.write("\033[F")  # Subir una línea
-            sys.stdout.write("\033[K")  # Borrar la línea
-        sys.stdout.flush()
-        lineas_mostradas = 0
-
-    print(mensaje)
-    # Actualizar el contador de líneas impresas
-    lineas_mostradas += mensaje.count('\n') + 1
-"""
 def cargar_config(ruta):
     ruta_base = os.path.dirname(os.path.abspath(__file__))
     ruta_completa=os.path.join(ruta_base,ruta)

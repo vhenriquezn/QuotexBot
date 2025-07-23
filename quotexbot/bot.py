@@ -214,7 +214,7 @@ class BotModular:
                 return
                 
             #resultado = await self.client.check_win(buy_info["id"], message_check)
-            resultado = await self.check_result(buyinfo, signal)
+            resultado = await self.check_result(buy_info, signal)
             print(resultado)
             profit = self.client.get_profit()
             total_profit += profit

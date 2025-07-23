@@ -37,7 +37,7 @@ def cargar_config(ruta):
 
 def get_estrategia():
     m_estrategias = {
-        "1": ("Cruzamiento de medias móviles (SMA)", ma_cross.calcular_senal_ma, 60, 5),
+        "1": ("Cruce de medias móviles (SMA)", ma_cross.calcular_senal_ma, 60, 5),
         "2": ("TopBot", topbot.calcular_senal_topbot, 60, 2),
         "3": ("Momentum", momentum.calcular_senal_momentum, 60, 2),
         "4": ("Señales Telegram", senal_telegram.calcular_senal, 60, 2),

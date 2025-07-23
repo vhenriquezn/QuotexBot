@@ -156,41 +156,6 @@ class BotModular:
             except ValueError:
                 print("Entrada inválida, ingrese un número.")
                 
-    async def check_result(self, buy_data, direction):
-        """
-        Check the result of the trade based on real-time price and direction.
-    
-        Args:
-            buy_data (dict): Information about the trade, including open price and close timestamp.
-            direction (str): The direction of the trade, either "call" or "put".
-    
-        Returns:
-            str: The result of the trade ("Win", "Loss", or "Doji").
-        """
-        open_price = buy_data.get('openPrice')
-    
-        while True:
-            prices = await self.client.get_realtime_price(buy_data['asset'])
-    
-            if not prices:
-                continue
-    
-            current_price = prices[-1]['price']
-    
-            print(f"\nCurrent Price: {current_price}, Open Price: {open_price}")
-    
-            if (direction == "call" and current_price > open_price) or (
-                    direction == "put" and current_price < open_price):
-                print("Result: WIN")
-                return 'Win'
-            elif (direction == "call" and current_price <= open_price) or (
-                    direction == "put" and current_price >= open_price):
-                print("Result: LOSS")
-                return 'Loss'
-            else:
-                print("Result: DOJI")
-                return 'Doji'
-                
     async def obtener_candles(self, asset, end_time, offset, period):
         candles = await self.client.get_candles(asset, end_time, offset, period)
         df = pd.DataFrame(candles)
@@ -208,14 +173,13 @@ class BotModular:
 
         while True:
             utils.borrar_lineas(1)
+            print(message_check)
             status, buy_info = await self.client.buy(entrada, self.asset, signal, self.expiration_time)
             if not status:
                 print("❌ No se pudo ejecutar la operación.")
                 return
                 
-            #resultado = await self.client.check_win(buy_info["id"], message_check)
-            resultado = await self.check_result(buy_info, signal)
-            print(resultado)
+            resultado = await self.client.check_winv2(buy_info["id"])
             profit = self.client.get_profit()
             total_profit += profit
 

@@ -263,58 +263,62 @@ class BotModular:
         return False, f"⚠️ No alcanzó precio favorable en {duracion}s"
 
     async def trading_loop(self):
-        await self.actualizar_entrada()
-        strategy, _, espera_segundos, opcion = utils.get_estrategia()
-
-        if opcion == "4":
-            await self.telegram_handler.iniciar()
-        else:
-            if self.config.get("set_asset") == "S":
-                self.asset = await self.seleccionar_activo_abierto()
-                if not self.asset:
-                    print("No se seleccionó activo válido. Abortando.")
-                    return
-            print(f"Bot iniciado con activo {self.asset}. esperando señales...\n")
-
-        print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
-        print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")
-        print("╠═════╬══════════╬═════════════╬═══════════╬═══════════╬════╬═══════════╬═════════╣")
-        print("╚═════╩══════════╩═════════════╩═══════════╬═══════════╩════╩═══════════╬═════════╣")
-        print(f"{' ':>43}║{'Ganancias de la sesion':^28}║ {0.0:>7} ║")
-        print(f"{' ':>43}╚════════════════════════════╩═════════╝\n\n")
-
-        message = ""
-        while True:
-            df = None
-            if opcion != "4":
-                await self.esperar_proxima_vela(espera_segundos, message) 
-                df = await self.obtener_candles(self.asset, int(time.time()) // 60 * 60, 60, 60)
-                utils.borrar_lineas(1)
-                print(">> Analizando Velas, porfavor espera...⏳")
-                
-            senal = strategy(df)
-            if senal:
-                precio_entrada = 0 if df is None else df.iloc[-1]["open"]
-                isValida, info = await self.validar_senal(senal, precio_entrada)
-                if isValida:
-                    msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado...⏳ "
-                    await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
-                else:
-                    self.operaciones.append({
-                        "hora": datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'),
-                        "paridad": self.asset,
-                        "direccion": senal.upper(),
-                        "inversion": 0,
-                        "resultado": info,
-                        "mg": None,
-                        "lucro": 0
-                    })
-
-                    ganancia_total = utils.mostrar_tabla(self.operaciones)    
+        try:
+            await self.actualizar_entrada()
+            strategy, _, espera_segundos, opcion = utils.get_estrategia()
+    
+            if opcion == "4":
+                await self.telegram_handler.iniciar()
             else:
-                if opcion == "4":
-                    await asyncio.sleep(1)
+                if self.config.get("set_asset") == "S":
+                    self.asset = await self.seleccionar_activo_abierto()
+                    if not self.asset:
+                        print("No se seleccionó activo válido. Abortando.")
+                        return
+                print(f"Bot iniciado con activo {self.asset}. esperando señales...\n")
+    
+            print("╔═════╦══════════╦═════════════╦═══════════╦═══════════╦════╦═══════════╦═════════╗")
+            print("║ CTD ║   HORA   ║   PARIDAD   ║ DIRECCION ║ RESULTADO ║ MG ║ INVERSION ║  LUCRO  ║")
+            print("╠═════╬══════════╬═════════════╬═══════════╬═══════════╬════╬═══════════╬═════════╣")
+            print("╚═════╩══════════╩═════════════╩═══════════╬═══════════╩════╩═══════════╬═════════╣")
+            print(f"{' ':>43}║{'Ganancias de la sesion':^28}║ {0.0:>7} ║")
+            print(f"{' ':>43}╚════════════════════════════╩═════════╝\n\n")
+    
+            message = ""
+            while True:
+                df = None
+                if opcion != "4":
+                    await self.esperar_proxima_vela(espera_segundos, message) 
+                    df = await self.obtener_candles(self.asset, int(time.time()) // 60 * 60, 60, 60)
+                    utils.borrar_lineas(1)
+                    print(">> Analizando Velas, porfavor espera...⏳")
+                    
+                senal = strategy(df)
+                if senal:
+                    precio_entrada = 0 if df is None else df.iloc[-1]["open"]
+                    isValida, info = await self.validar_senal(senal, precio_entrada)
+                    if isValida:
+                        msg = f">>🔔 Señal de {'COMPRA' if senal == 'call' else 'VENTA'} detectada, esperando resultado...⏳ "
+                        await self.ejecutar_operacion(senal, msg, hora_op=datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'))
+                    else:
+                        self.operaciones.append({
+                            "hora": datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S'),
+                            "paridad": self.asset,
+                            "direccion": senal.upper(),
+                            "inversion": 0,
+                            "resultado": info,
+                            "mg": None,
+                            "lucro": 0
+                        })
+    
+                        ganancia_total = utils.mostrar_tabla(self.operaciones)    
                 else:
-                    message = f"{datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S')} - No hay señal en esta vela, "
-        print("Cerrando sesion...")
-        self.client.close()
+                    if opcion == "4":
+                        await asyncio.sleep(1)
+                    else:
+                        message = f"{datetime.fromtimestamp(int(time.time()) // 60 * 60).strftime('%H:%M:%S')} - No hay señal en esta vela, "
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            print("\n🛑 Programa detenido por el usuario.")
+        finally:
+            print("cerrando")
+            self.client.close()
